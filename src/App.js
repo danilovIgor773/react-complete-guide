@@ -3,7 +3,7 @@ import "./App.css";
 import Person from "./Person/Person";
 //import UserInput from "./UserInput/UserInput";
 //import UserOutput from "./UserOutput/UserOutput";
-
+//--------------------Before render ---------------------
 class App extends Component {
   state = {
     persons: [
@@ -13,21 +13,6 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: false
-  };
-
-  switchNameHandler = newName => {
-    //console.log("Was clicked!");
-    //IT IS NOT ALLOWED!!! this.state.persons[0].name = "Danny";
-
-    //--------------------Before render ---------------------
-    this.setState({
-      persons: [
-        { name: newName, age: "40" },
-        { name: "Fatma", age: "32" },
-        { name: "Feruza", age: "23" }
-      ],
-      otherState: "some other value"
-    });
   };
 
   nameChangedhandler = event => {
@@ -46,6 +31,11 @@ class App extends Component {
     this.setState({ showPersons: !doesShow });
   };
 
+  deletePerson = index => {
+    const persons = this.state.persons;
+    persons.splice(index, 1);
+    this.setState({ persons: persons });
+  };
   //---------Inside render() method--------------------
 
   render() {
@@ -62,22 +52,15 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          <Person
-            name={this.state.persons[0].name}
-            age={this.state.persons[0].age}
-          />
-          <Person
-            name={this.state.persons[1].name}
-            age={this.state.persons[1].age}
-            click={this.switchNameHandler.bind(this, "Danny_The_Mage!")}
-            changed={this.nameChangedhandler}
-          >
-            My hobbies is: Racing
-          </Person>
-          <Person
-            name={this.state.persons[2].name}
-            age={this.state.persons[2].age}
-          />
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                click={() => this.deletePerson(index)}
+                name={person.name}
+                age={person.age}
+              />
+            );
+          })}
         </div>
       );
     }
