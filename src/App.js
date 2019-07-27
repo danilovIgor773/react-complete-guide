@@ -7,23 +7,29 @@ import Person from "./Person/Person";
 class App extends Component {
   state = {
     persons: [
-      { name: "Igor", age: "29" },
-      { name: "Tim", age: "30" },
-      { name: "Rem", age: "20" }
+      { id: "asde1", name: "Igor", age: "29" },
+      { id: "fdfrgd2", name: "Tim", age: "30" },
+      { id: "fhgjmg23", name: "Rem", age: "20" }
     ],
     otherState: "some other value",
     showPersons: false
   };
 
-  nameChangedhandler = event => {
-    this.setState({
-      persons: [
-        { name: "Gosha", age: "40" },
-        { name: event.target.value, age: "32" },
-        { name: "Feruza", age: "23" }
-      ],
-      otherState: "some other value"
+  nameChangedhandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(pers => {
+      return pers.id === id;
     });
+
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    this.setState({ persons: persons });
   };
 
   togglePersonsHandler = () => {
@@ -32,7 +38,9 @@ class App extends Component {
   };
 
   deletePerson = index => {
-    const persons = this.state.persons;
+    //Always use immutability approach.
+    //or you can do it with slice(): const persons = this.state.persons.slice();
+    const persons = [...this.state.persons];
     persons.splice(index, 1);
     this.setState({ persons: persons });
   };
@@ -40,7 +48,8 @@ class App extends Component {
 
   render() {
     const styleButton = {
-      backgroundColor: "white",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
@@ -58,17 +67,29 @@ class App extends Component {
                 click={() => this.deletePerson(index)}
                 name={person.name}
                 age={person.age}
+                key={person.id}
+                changed={event => this.nameChangedhandler(event, person.id)}
               />
             );
           })}
         </div>
       );
+      styleButton.backgroundColor = "red";
+    }
+
+    let classes = [];
+
+    if (this.state.persons.length <= 2) {
+      classes.push("red");
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push("bold");
     }
 
     return (
       <div className="App">
         <h1>Hi I''am a React App!</h1>
-        <p>This is really working!</p>
+        <p className={classes.join(" ")}>This is really working!</p>
         <button style={styleButton} onClick={this.togglePersonsHandler}>
           Toggle Persons
         </button>
