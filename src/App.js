@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
+import Radium from "radium";
 //import UserInput from "./UserInput/UserInput";
 //import UserOutput from "./UserOutput/UserOutput";
 //--------------------Before render ---------------------
@@ -53,7 +54,11 @@ class App extends Component {
       font: "inherit",
       border: "1px solid blue",
       padding: "8px",
-      cursor: "pointer"
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black"
+      }
     };
 
     let persons = null;
@@ -75,6 +80,10 @@ class App extends Component {
         </div>
       );
       styleButton.backgroundColor = "red";
+      styleButton[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black"
+      };
     }
 
     let classes = [];
@@ -99,7 +108,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Radium(App);
 
 // const App = props => {
 //   const [personsState, setPersonsState] = useState({
